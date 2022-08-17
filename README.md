@@ -1,4 +1,5 @@
 # Infinite-Art-Gallery
+### [Click for Demo!](https://infinite-art-gallery.brazil-0034.repl.co/)
 3D Infinite Procedurally-Generated Art Gallery! This pulls from Reddit's r/Art and creates a procedural infinite art gallery from random (sfw-only) posts.
 
 Rendered entirely with THREE.JS in the browser. (May) require a server couterpart to host and filter posts from the Reddit, Harvard Art Museum, and Met APIs.
