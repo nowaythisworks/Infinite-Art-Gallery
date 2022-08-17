@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Infinite Art Gallery</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+
+    <script type="importmap">
+      {
+        "imports": {    
+            "three": "https://cdn.skypack.dev/-/three@v0.137.5-HJEdoVYPhjkiJWkt6XIa/dist=es2019,mode=raw/build/three.module.js",
+            "three/PointerLockControls": "https://cdn.skypack.dev/-/three@v0.137.5-HJEdoVYPhjkiJWkt6XIa/dist=es2019,mode=raw/examples/jsm/controls/PointerLockControls.js",
+            "three/FontLoader": "https://cdn.skypack.dev/-/three@v0.137.5-HJEdoVYPhjkiJWkt6XIa/dist=es2019,mode=raw/examples/jsm/loaders/FontLoader.js",
+            "three/TextGeometry": "https://cdn.skypack.dev/-/three@v0.137.5-HJEdoVYPhjkiJWkt6XIa/dist=es2019,mode=raw/examples/jsm/geometries/TextGeometry.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="coords" style="position: absolute; top: 10px; left: 5px;">
+      
+    </div>
+    <!-- Including the three.js library -->
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
