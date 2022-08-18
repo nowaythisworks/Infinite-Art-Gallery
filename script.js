@@ -26,7 +26,7 @@ const ceilingHeight = 7;
 const playerHeight = 2;
 const playerSpeed = 6;
 const playerSpeedSprintMod = 0.5;
-const artwallSpawnDistance = 10;
+const artwallSpawnDistance = 30;
 
 /**
  * Basic THREE.JS Scene Setup
@@ -77,7 +77,15 @@ const backgroundCube = new THREE.Mesh(new THREE.BoxGeometry(14, 12, 1), new THRE
 backgroundCube.position.set(0.5, 0.5, -5.5);
 scene.add(backgroundCube);
 
+var loadingText;
 fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
+    loadingText = new TextGeometry('Loading...', {
+        font: font,
+        size: 0.45,
+        height: 1,
+        curveSegments: 2
+    });
+    
     const headerGeometry = new TextGeometry('The Infinite Gallery', {
         font: font,
         size: 80,
@@ -239,6 +247,17 @@ const artboardMaterials = [];
                     })
                 );
 
+                const loadingTextMesh = new THREE.Mesh(
+                    loadingText,
+                    new THREE.MeshBasicMaterial({
+                        color: 0x000000
+                    })
+                );
+                scene.add(loadingTextMesh);
+                loadingTextMesh.scale.z /= 50;
+                loadingTextMesh.position.set(pos.x, 1, pos.z);
+                
+
                 chunkPieces.push(artWall);
                 artWall.name = "artWall";
                 console.log(pos);
@@ -247,11 +266,15 @@ const artboardMaterials = [];
                 chunkPieces.push(artWall);
 
                 if (Math.floor(Math.random() * 10) < 5) {
-                    artWall.rotation.y = Math.PI / 2;
+                    artWall.rotation.y = -Math.PI / 2;
+                    loadingTextMesh.rotation.y = -Math.PI / 2;
                 }
 
-                new THREE.TextureLoader().load(
-                    "https://infinite-art-gallery-server.brazil-0034.repl.co/random-image",
+                const loader = new THREE.TextureLoader();
+                loader.setCrossOrigin("anonymous");
+                const rand = Math.floor(Math.random() * 10000);
+                loader.load(
+                    "https://blog.nowaythis.works/random-image?dummy=" + rand,
                     function (art) {
                         // chance for chunk to spawn ART!!
                         for (let x = 0; x < artImages.length; x++) {
@@ -259,6 +282,7 @@ const artboardMaterials = [];
                                 scene.remove(artWall);
                                 artImages.splice(artImages.indexOf(artImages[i].position), 1);
                                 canGenerate = false;
+                                scene.remove(artWall);
                             }
                         }
 
@@ -273,6 +297,7 @@ const artboardMaterials = [];
                             });
 
                             artboardMaterials.push(artWall.material);
+                            scene.remove(loadingTextMesh);
                         }
                     }
                 );
