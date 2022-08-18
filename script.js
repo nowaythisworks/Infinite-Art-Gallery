@@ -74,7 +74,7 @@ scene.add(camera);
 const fontLoader = new FontLoader();
 
 const backgroundCube = new THREE.Mesh(new THREE.BoxGeometry(14, 12, 1), new THREE.MeshBasicMaterial({color: 0x000000}));
-backgroundCube.position.set(0.5, 0.5, -5.5);
+backgroundCube.position.set(0, 0.5, -5.5);
 scene.add(backgroundCube);
 
 var loadingText;
@@ -95,10 +95,10 @@ fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
     
     const header = new THREE.Mesh(headerGeometry, new THREE.MeshBasicMaterial({ color: 0xffffff }));
     scene.add(header);
-    header.position.set(-5, 4, -5);
+    header.position.set(-6, 4, -5);
     header.scale.set(header.scale.x / 100, header.scale.y / 100, header.scale.z / 500);
 
-    const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is an infinite 3D art gallery. Instead of being pulled from museums, every piece of art is\npulled from Reddit\'s r/Art. Meaning, everything in this gallery was created by a person like you or me!\nPlus, there is no bias on the amount of votes a post got - so absolutely anyone\'s art could appear here,\nregardless of fame. Just start walking and the exhibit will appear around you.\n\nExplore and have fun!', {
+    const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nExplore and have fun!', {
         font: font,
         size: 15,
         height: 5,
@@ -106,7 +106,7 @@ fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
     });
     const subheader = new THREE.Mesh(subheaderGeometry, new THREE.MeshBasicMaterial({ color: 0xffffff }));
     scene.add(subheader);
-    subheader.position.set(-5, 3.5, -5);
+    subheader.position.set(-6, 3.5, -5);
     subheader.scale.set(subheader.scale.x / 100, subheader.scale.y / 100, subheader.scale.z / 500);
 
     const tutorialGeometry = new TextGeometry('Use Arrow Keys or [WASD] to walk. Explore and have fun!', {
@@ -117,7 +117,7 @@ fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
     });
     const tutorial = new THREE.Mesh(tutorialGeometry, new THREE.MeshBasicMaterial({ color: 0x711ca6 }));
     scene.add(tutorial);
-    tutorial.position.set(-5, 1.1, -5);
+    tutorial.position.set(-6, 1.1, -5);
     tutorial.scale.set(tutorial.scale.x / 100, tutorial.scale.y / 100, tutorial.scale.z / 500);
 });
 
@@ -212,7 +212,7 @@ function startGenerateCountdown() {
     readyToGenerate = false;
     setTimeout(function () {
         readyToGenerate = true;
-    }, 5 * 1000);
+    }, 10 * 1000);
 }
 
 // lerp the transparency 0 to 1
@@ -220,7 +220,7 @@ const artboardMaterials = [];
 (function attemptArtboard() {
     setTimeout(function () {
         // ART GENERATION
-        if (Math.floor(Math.random() * 1000) < 250 && readyToGenerate == true) {
+        if (Math.floor(Math.random() * 1000) < 200 && readyToGenerate == true) {
             let canGenerate = true;
             startGenerateCountdown();
 
@@ -268,11 +268,16 @@ const artboardMaterials = [];
                 if (Math.floor(Math.random() * 10) < 5) {
                     artWall.rotation.y = -Math.PI / 2;
                     loadingTextMesh.rotation.y = -Math.PI / 2;
+                    loadingTextMesh.position.z = pos.z - 1.4;
+                }
+                else
+                {
+                    loadingTextMesh.position.x = pos.x - 1.4;
                 }
 
                 const loader = new THREE.TextureLoader();
                 loader.setCrossOrigin("anonymous");
-                const rand = Math.floor(Math.random() * 10000);
+                const rand = Math.floor(Math.random() * 1000000);
                 loader.load(
                     "https://blog.nowaythis.works/random-image?dummy=" + rand,
                     function (art) {
