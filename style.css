@@ -4,6 +4,28 @@ html, body {
 	user-select: none;
     padding: 0;
     margin: 0;
+    font-family: Tahoma;
+    font-size: 14px;
+}
+
+a {
+    background-color: black;
+}
+
+#mobile-block {
+    width: 100%;
+    height: 100%;
+    color: white;
+    background: black;
+    display: none;
+    position: absolute;
+    top: 0; left: 0;
+}
+
+@media (pointer:none), (pointer:coarse) {
+    #mobile-block {
+        display:block;
+    }
 }
 
 canvas {

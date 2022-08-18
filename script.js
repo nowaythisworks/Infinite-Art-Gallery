@@ -98,7 +98,7 @@ fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
     header.position.set(-6, 4, -5);
     header.scale.set(header.scale.x / 100, header.scale.y / 100, header.scale.z / 500);
 
-    const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nExplore and have fun!', {
+const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nThanks for visiting!', {
         font: font,
         size: 15,
         height: 5,

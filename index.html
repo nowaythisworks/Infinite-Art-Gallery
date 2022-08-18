@@ -3,9 +3,27 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>Infinite Art Gallery</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
 
+    <!-- Primary Meta Tags -->
+    <title>The Infinite Gallery </title>
+    <meta name="title" content="The Infinite Gallery ">
+    <meta name="description" content="Explore a 3D Art Museum of art made by random people across the globe.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gallery.nowaythis.works/">
+    <meta property="og:title" content="The Infinite Gallery ">
+    <meta property="og:description" content="Explore a 3D Art Museum of art made by random people across the globe.">
+    <meta property="og:image" content="img/metacover.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gallery.nowaythis.works/">
+    <meta property="twitter:title" content="The Infinite Gallery ">
+    <meta property="twitter:description" content="Explore a 3D Art Museum of art made by random people across the globe.">
+    <meta property="twitter:image" content="img/metacover.png">
+      
       <!-- Prevent chrome related bugging of image caches -->
       <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
       <meta http-equiv="Pragma" content="no-cache" /> <meta http-equiv="Expires" content="0" />
@@ -22,9 +40,16 @@
     </script>
   </head>
   <body>
-    <div id="coords" style="position: absolute; top: 10px; left: 5px;">
-      
-    </div>
+      <div id="mobile-block">
+          <center>
+              <h1 style="display:none">The Infinite Gallery</h1>
+              <h2>Sorry, but this experience only works on a device with a keyboard and mouse.</h2>
+              <h3>Try visiting on a laptop or home computer.</h3>
+              <h3><a href="/">https://gallery.nowaythis.works</a></h3>
+          </center>
+      </div>
+    <div id="coords" style="position: absolute; top: 10px; left: 10px;"></div>
+    <a href="https://github.com/Brazil-0034/Infinite-Art-Gallery" style="text-decoration: underline; color: white; outline: 1px black; position: absolute; bottom: 10px; left: 10px;">Visit on GitHub :)</a>
     <!-- Including the three.js library -->
     <script src="script.js" type="module"></script>
   </body>
