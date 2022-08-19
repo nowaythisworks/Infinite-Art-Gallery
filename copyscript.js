@@ -98,7 +98,7 @@ fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
     header.position.set(-6, 4, -5);
     header.scale.set(header.scale.x / 100, header.scale.y / 100, header.scale.z / 500);
 
-const subheaderGeometry = new TextGeometry('This is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nThanks for visiting!', {
+const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nThanks for visiting!', {
         font: font,
         size: 15,
         height: 5,
@@ -109,7 +109,7 @@ const subheaderGeometry = new TextGeometry('This is an infinite 3D art gallery. 
     subheader.position.set(-6, 3.5, -5);
     subheader.scale.set(subheader.scale.x / 100, subheader.scale.y / 100, subheader.scale.z / 500);
 
-    const tutorialGeometry = new TextGeometry('Use Arrow Keys or [WASD] to walk. Use your mouse to look around.\nExplore and have fun!', {
+    const tutorialGeometry = new TextGeometry('Use Arrow Keys or [WASD] to walk. Explore and have fun!', {
         font: font,
         size: 20,
         height: 5,
@@ -136,7 +136,6 @@ canvas.onclick = function () {
     canvas.requestPointerLock();
 }
 
-var mouseNegative = 1;
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 canvas.onmousemove = function (event) {
     if (pointerIsLocked) {
@@ -144,7 +143,7 @@ canvas.onmousemove = function (event) {
         const mouseY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
         euler.y -= mouseX * 0.002;
-        euler.x -= mouseY * 0.002 * mouseNegative;
+        euler.x -= mouseY * 0.002;
         euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
 
         camera.quaternion.setFromEuler(euler);
@@ -451,11 +450,4 @@ window.addEventListener('resize', function () {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-// on press of V key
-document.addEventListener('keydown', function (event) {
-    if (event.code === 'KeyV') {
-        mouseNegative = -1 * mouseNegative;
-    }
 });
