@@ -10,7 +10,7 @@ Rendered entirely with THREE.JS in the browser. (May) require a server couterpar
 - We generate the images randomly 30 meters in front of the player. There is a 10% chance every second for an image to generate, and once it is generated, there is a mandated cooldown of ~~10~~ 5 seconds.
 
 ## TODO
-- Mobile Phone Support!!!!!!! (figure out how to do controls on a phone)
+- ~~Mobile Phone Support!!!!!!! (figure out how to do controls on a phone)~~ DONE! This one was really hard.
 - Proper Crediting - right now, the server will etch the artist's name onto the image file. This is both hard to read and computationally intensive (and possibly a licensing violation in some cases?), so maybe a plaque with the author and title could be better. Unfortunately, Reddit's API is prone to many (many) issues and we can't just direct-link the image without the middleman server.
 - More World Details - like a random potted plant or maybe a sculpture or vase here and there, to fill in the void.
 - ~~Firefox Support~~ Done!
