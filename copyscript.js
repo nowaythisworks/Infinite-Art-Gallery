@@ -14,9 +14,28 @@
 
 // NOTE: the print() command is very useful!!
 import * as THREE from "https://cdn.skypack.dev/pin/three@v0.143.0-Cpkbmg37IsbIniRRPFSZ/mode=imports,min/optimized/three.js"
-import { PointerLockControls } from "/PointerLockControls.js"
 import { FontLoader } from "/FontLoader.js"
 import { TextGeometry } from "/TextGeometry.js"
+import TouchControls from "/TouchControls/TouchControls-master/js/TouchControls.js"
+let touchControls;
+
+// find out if a device is mobile (no keyboard or mouse)
+function isMobile() {
+    if (navigator.userAgent.match(/Android/i) ||
+        navigator.userAgent.match(/webOS/i) ||
+        navigator.userAgent.match(/iPhone/i) ||
+        navigator.userAgent.match(/iPad/i) ||
+        navigator.userAgent.match(/iPod/i) ||
+        navigator.userAgent.match(/BlackBerry/i) ||
+        navigator.userAgent.match(/Windows Phone/i)) {
+        return true;
+    } else {
+        // find elements tagged movement-pad and hide them
+        return false;
+    }
+}
+
+const mobile = isMobile();
 
 /**
  * Engine and Player Setup
@@ -39,8 +58,8 @@ scene.background = new THREE.Color(0xe5e8ea);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
+renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setClearColor(0xe5e8ea, 1);
-// renderer.setPixelRatio(0.25s);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
@@ -62,6 +81,25 @@ const ceilingTexture = new THREE.TextureLoader().load('img/ceiling.png', functio
 // Camera Starting Position
 camera.position.set(0, playerHeight, 0);
 
+// touch screen controls
+function addControls() {
+    // Controls
+    let options = {
+        delta: 0.75,           // coefficient of movement
+        moveSpeed: 0.15,        // speed of movement
+        rotationSpeed: 0.002,  // coefficient of rotation
+        maxPitch: 55,          // max camera pitch angle
+        hitTest: true,         // stop on hitting objects
+        hitTestDistance: 40    // distance to test for hit
+    }
+
+    console.log("EL: " + renderer.domElement);
+    touchControls = new TouchControls(document.body, camera, options)
+    touchControls.setPosition(0, 25, 400)
+    touchControls.addToScene(scene)
+}
+addControls();
+
 // child cube for the camera, will be directly in front of it at all times
 const followCube = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0xff00ff, transparent: true, opacity: 0 }));
 followCube.position.set(0, 0, -artwallSpawnDistance);
@@ -76,6 +114,8 @@ const fontLoader = new FontLoader();
 const backgroundCube = new THREE.Mesh(new THREE.BoxGeometry(14, 12, 1), new THREE.MeshBasicMaterial({color: 0x000000}));
 backgroundCube.position.set(0, 0.5, -5.5);
 scene.add(backgroundCube);
+
+if (mobile) document.querySelector("#removal").style.textAlign = "center";
 
 var loadingText;
 fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
@@ -97,8 +137,17 @@ fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
     scene.add(header);
     header.position.set(-6, 4, -5);
     header.scale.set(header.scale.x / 100, header.scale.y / 100, header.scale.z / 500);
+    if (mobile) {
+        header.scale.set(header.scale.x / 3, header.scale.y / 3, header.scale.z);
+        header.position.set(-1.85, 4, -5);
+    }
 
-const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nThanks for visiting!', {
+    var visitorText = 'This is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nThanks for visiting!';
+    if (mobile) {
+        visitorText = 'This is an infinite 3D art gallery. Every piece of art is pulled from\nReddit\'s r/Art. Meaning, everything in this gallery was created by a\nperson like you or me!  Plus, there is no bias on the amount of votes\na post got, so absolutely anyone\'s art could appear here, regardless of fame.\nCurrently, there are over 1.8 MILLION pieces of art in this room.\nJust start walking and the exhibit will appear around you.\n\nThanks for visiting!';
+        visitorText += '\n[Mobile Beta Version] Some features are only accessible on\na device with a keyboard and mouse.';
+    }
+const subheaderGeometry = new TextGeometry(visitorText, {
         font: font,
         size: 15,
         height: 5,
@@ -108,8 +157,16 @@ const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is 
     scene.add(subheader);
     subheader.position.set(-6, 3.5, -5);
     subheader.scale.set(subheader.scale.x / 100, subheader.scale.y / 100, subheader.scale.z / 500);
+    if (mobile) {
+        subheader.scale.set(subheader.scale.x / 2, subheader.scale.y / 2, subheader.scale.z);
+        subheader.position.set(-1.85, 3.7, -5);
+    }
 
-    const tutorialGeometry = new TextGeometry('Use Arrow Keys or [WASD] to walk. Explore and have fun!', {
+    var tutorialText = 'Use Arrow Keys or [WASD] to walk. Use your mouse to look around.\nExplore and have fun!';
+    if (mobile) {
+        tutorialText = 'Drag your finger forwards on the circle to progress.\n(Access this page on a laptop or desktop PC for the full experience!)'
+    }
+    const tutorialGeometry = new TextGeometry(tutorialText, {
         font: font,
         size: 20,
         height: 5,
@@ -119,6 +176,10 @@ const subheaderGeometry = new TextGeometry('By Austin  //  Brazil-0034\nThis is 
     scene.add(tutorial);
     tutorial.position.set(-6, 1.1, -5);
     tutorial.scale.set(tutorial.scale.x / 100, tutorial.scale.y / 100, tutorial.scale.z / 500);
+    if (mobile) {
+        tutorial.scale.set(tutorial.scale.x / 3, tutorial.scale.y / 3, tutorial.scale.z);
+        tutorial.position.set(-1.85, 2.1, -5);
+    }
 });
 
 /**
@@ -133,9 +194,11 @@ const canvas = document.body;
 canvas.requestPointerLock = canvas.requestPointerLock || canvas.msRequestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
 
 canvas.onclick = function () {
+    if (mobile) return;
     canvas.requestPointerLock();
 }
 
+var mouseNegative = 1;
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 canvas.onmousemove = function (event) {
     if (pointerIsLocked) {
@@ -143,7 +206,7 @@ canvas.onmousemove = function (event) {
         const mouseY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
         euler.y -= mouseX * 0.002;
-        euler.x -= mouseY * 0.002;
+        euler.x -= mouseY * 0.002 * mouseNegative;
         euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
 
         camera.quaternion.setFromEuler(euler);
@@ -159,6 +222,7 @@ if ("onpointerlockchange" in document) {
 }
 
 function lockChangeAlert() {
+    if (mobile) return;
     if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas || document.webkitPointerLockElement === canvas) {
         pointerIsLocked = true;
     } else {
@@ -212,7 +276,7 @@ function startGenerateCountdown() {
     readyToGenerate = false;
     setTimeout(function () {
         readyToGenerate = true;
-    }, 10 * 1000);
+    }, 5 * 1000);
 }
 
 // lerp the transparency 0 to 1
@@ -227,7 +291,6 @@ const artboardMaterials = [];
             const pos = new THREE.Vector3(0, 0, 0);
             followCube.getWorldPosition(pos);
 
-            console.log(1);
             // make sure artwalls don't hop on the same spot, since they are separated from chunk meshes
             for (let i = 0; i < chunkPieces.length; i++) {
                 if (chunkPieces[i].name == "artWall") {
@@ -260,12 +323,12 @@ const artboardMaterials = [];
 
                 chunkPieces.push(artWall);
                 artWall.name = "artWall";
-                console.log(pos);
+                
                 artWall.position.set(pos.x, groundHeight + 2, pos.z);
                 scene.add(artWall);
                 chunkPieces.push(artWall);
 
-                if (Math.floor(Math.random() * 10) < 5) {
+                if (Math.floor(Math.random() * 10) < 5 && mobile == false) {
                     artWall.rotation.y = -Math.PI / 2;
                     loadingTextMesh.rotation.y = -Math.PI / 2;
                     loadingTextMesh.position.z = pos.z - 1.4;
@@ -359,36 +422,75 @@ function update(delta) {
     }
 
     // CONTROLS
+    touchControls.update();
+
+    if (mobile == false) {
+        var movementPad = document.querySelector(".movement-pad");
+        // remove the element
+        if (movementPad != undefined) movementPad.parentNode.removeChild(movementPad);
+    }
+    
     const moveSpeed = playerSpeed * delta * (1 + Number(isSprinting) * playerSpeedSprintMod);
-    if (keys['KeyW'] || keys['ArrowUp']) {
-        // forward movement
-        moveVector.setFromMatrixColumn(camera.matrix, 0);
-        moveVector.crossVectors(camera.up, moveVector);
-        moveVector.multiplyScalar(moveSpeed);
-
-        camera.position.addScaledVector(moveVector, 1);
+    
+    if (keys['KeyW'] || keys['ArrowUp'] || touchControls.moveForward) {
+        if (mobile && touchControls.moveBackward)
+        {
+            camera.position.z -= moveSpeed;
+        } else
+        {
+            // forward movement
+            moveVector.setFromMatrixColumn(camera.matrix, 0);
+            moveVector.crossVectors(camera.up, moveVector);
+            moveVector.multiplyScalar(moveSpeed);
+    
+            camera.position.addScaledVector(moveVector, 1);
+        }
     }
-    if (keys['KeyS'] || keys['ArrowDown']) {
-        // backward movement
-        moveVector.setFromMatrixColumn(camera.matrix, 0);
-        moveVector.crossVectors(camera.up, moveVector);
-        moveVector.multiplyScalar(moveSpeed);
-
-        camera.position.addScaledVector(moveVector, -1);
+    if (keys['KeyS'] || keys['ArrowDown'] || touchControls.moveBackward) {
+        if (mobile && touchControls.moveBackward)
+        {
+            moveVector.setFromMatrixColumn(camera.matrix, 0);
+            moveVector.crossVectors(camera.up, moveVector);
+            moveVector.multiplyScalar(moveSpeed);
+    
+            camera.position.addScaledVector(moveVector, -1);
+        }
+        else
+        {
+            // backward movement
+            moveVector.setFromMatrixColumn(camera.matrix, 0);
+            moveVector.crossVectors(camera.up, moveVector);
+            moveVector.multiplyScalar(moveSpeed);
+    
+            camera.position.addScaledVector(moveVector, -1);
+        }
     }
-    if (keys['KeyA'] || keys['ArrowLeft']) {
-        // left movement
-        moveVector.setFromMatrixColumn(camera.matrix, 0);
-        moveVector.multiplyScalar(moveSpeed);
+    if (keys['KeyA'] || keys['ArrowLeft'] || touchControls.moveLeft) {
+        if (mobile && touchControls.moveLeft)
+        {
+            camera.position.x += moveSpeed;
+        }
+        else
+        {
+            // left movement
+            moveVector.setFromMatrixColumn(camera.matrix, 0);
+            moveVector.multiplyScalar(moveSpeed);
+            camera.position.addScaledVector(moveVector, -1);
+        }
 
-        camera.position.addScaledVector(moveVector, -1);
     }
-    if (keys['KeyD'] || keys['ArrowRight']) {
-        // right movement
-        moveVector.setFromMatrixColumn(camera.matrix, 0);
-        moveVector.multiplyScalar(moveSpeed);
-
-        camera.position.addScaledVector(moveVector, 1);
+    if (keys['KeyD'] || keys['ArrowRight'] || touchControls.moveRight) {
+        if (mobile && touchControls.moveRight)
+        {
+            camera.position.x -= moveSpeed;
+        }
+        else
+        {
+            // right movement
+            moveVector.setFromMatrixColumn(camera.matrix, 0);
+            moveVector.multiplyScalar(moveSpeed);
+            camera.position.addScaledVector(moveVector, 1);
+        }
     }
 
     isSprinting = keys['ShiftLeft'] || keys['ShiftRight'] || false;
@@ -450,4 +552,11 @@ window.addEventListener('resize', function () {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// on press of V key
+document.addEventListener('keydown', function (event) {
+    if (event.code === 'KeyV') {
+        mouseNegative = -1 * mouseNegative;
+    }
 });

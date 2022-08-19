@@ -1,0 +1,67 @@
+body {
+    background-color: #000000;
+}
+
+.rotation-pad {
+	position: absolute;
+}
+
+.rotation-pad .region {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	background: radial-gradient(rgba(218, 225, 230, 0.25) 5%, rgba(218, 225, 230, 0.50) 95%),
+				url("../images/cam.png") center center no-repeat;
+	border: 2px solid rgba(218, 225, 230, 0.25);
+	border-radius: 90px;
+	box-shadow: 0px 0px 5px rgba(194, 200, 204, 0.55);
+	user-select: none;
+}
+
+.rotation-pad .handle {
+	opacity: 0.1;
+	position: absolute;
+	height: 30px;
+	width: 30px;
+	top: 0px;
+	left: 0px;
+	background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
+	/*border: 1px solid rgba(145, 105, 245, 0.90);*/
+	border-radius: 50%;
+	box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
+	text-align: center;
+	font: 24px/44px "Courier New", Courier, monospace;
+    user-select: none;
+}
+
+.movement-pad {
+	position: absolute;
+}
+
+.movement-pad .region {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	background: radial-gradient(rgba(218, 225, 230, 0.25) 5%, rgba(218, 225, 230, 0.50) 95%),
+				url("../images/nav.png") center center no-repeat;
+	border: 2px solid rgba(218, 225, 230, 0.25);
+	border-radius: 90px;
+	box-shadow: 0px 0px 5px rgba(194, 200, 204, 0.55);
+	user-select: none;
+}
+
+.movement-pad .handle {
+	opacity: 0.1;
+	position: absolute;
+	height: 30px;
+	width: 30px;
+	top: 0px;
+	left: 0px;
+	background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
+	/*border: 1px solid rgba(145, 105, 245, 0.90);*/
+	border-radius: 50%;
+	box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
+	text-align: center;
+	font: 24px/44px "Courier New", Courier, monospace;
+	user-select: none;
+}
