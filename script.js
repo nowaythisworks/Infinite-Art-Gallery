@@ -213,7 +213,7 @@ function startGenerateCountdown() {
     readyToGenerate = false;
     setTimeout(function () {
         readyToGenerate = true;
-    }, 10 * 1000);
+    }, 5 * 1000);
 }
 
 // lerp the transparency 0 to 1
