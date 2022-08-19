@@ -13,6 +13,8 @@ Rendered entirely with THREE.JS in the browser. (May) require a server couterpar
 - Mobile Phone Support!!!!!!! (figure out how to do controls on a phone)
 - Proper Crediting - right now, the server will etch the artist's name onto the image file. This is both hard to read and computationally intensive (and possibly a licensing violation in some cases?), so maybe a plaque with the author and title could be better. Unfortunately, Reddit's API is prone to many (many) issues and we can't just direct-link the image without the middleman server.
 - More World Details - like a random potted plant or maybe a sculpture or vase here and there, to fill in the void.
+- ~~Firefox Support~~ Done!
+- ~~Mouse Direction Reversal~~ Done!
 
 ![front board and tutorial](https://user-images.githubusercontent.com/66288732/185100953-3f2e287d-b06c-4140-a500-f01a32982888.png)
 ![art piece in preview](https://user-images.githubusercontent.com/66288732/185100745-2bb8a35d-71ad-4fb5-b9b7-0c800acf6cda.png)
