@@ -11,15 +11,6 @@
     <meta name="title" content="The Infinite Gallery ">
     <meta name="description" content="Explore an infinite 3D Art Museum of art made by random people across the globe.">
 
-    <!-- FAVICON -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5cdbff">
-    <meta name="msapplication-TileColor" content="#00aba9">
-    <meta name="theme-color" content="#ffffff">
-
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gallery.nowaythis.works/">
@@ -47,18 +38,22 @@
 
     <meta name="HandheldFriendly" content="true" />
 
-    <!-- mobile controls -->
     <link rel="stylesheet" href="TouchControls/TouchControls-master/css/touch-pad.css">
     <link rel="stylesheet" href="TouchControls/TouchControls-master/css/main.css">
-
-    <!-- seeded randoms -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 </head>
+    
+<!-- Google tag (gtag.js) -->
+<!-- anonymous geo analytics - these are often blocked by ad blockers and many browsers. it is only to see how i can increase server stability in certain regions. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZRYYEL7ZJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZRYYEL7ZJG');
+</script>
 
 <body>
-    <div id="click-warning-overlay">
-        <div>Click Here to Start</div>
-    </div>
     <div id="mobile-block">
         <center>
             <h1 style="display:none">The Infinite Gallery</h1>
@@ -74,12 +69,12 @@
     <a href="https://github.com/Brazil-0034/Infinite-Art-Gallery"
         style="text-decoration: underline; color: white; outline: 1px black; position: absolute; bottom: 10px; left: 10px;"
         target="_blank">Visit on GitHub :)</a>
-    <a id="removal" href="https://replit.com/@Brazil-0034/BIG-UPDATES-Infinite-3D-Art-Gallery?v=1"
+    <a id="removal" href="https://www.reddit.com/user/GrammmyNorma"
         style="text-decoration: underline; color: white; outline: 1px black; position: absolute; bottom: 10px; right: 10px;"
-        target="_blank">Report bugs on Repl.it! There are plenty of them :)</a>
+        target="_blank">See your own art and want it removed? No problem, message me.</a>
 
-    <!-- Including the three.js library -->
-    <script src="script.js" type="module"></script>
+    <!-- Including the MOBILE library -->
+    <script src="mobilescript.js" type="module"></script>
 </body>
 
 </html>

@@ -12,7 +12,12 @@
  * (SFW content only) created by anyone in the world, with zero bias on vote count. Isn't that incredible?
  */
 
-// NOTE: the print() command is very useful!!
+const clearOverlay = function() {
+    if (document.getElementById("click-warning-overlay")) {
+        document.body.removeChild(document.getElementById("click-warning-overlay"));
+    }
+}
+
 import * as THREE from "https://cdn.skypack.dev/pin/three@v0.143.0-Cpkbmg37IsbIniRRPFSZ/mode=imports,min/optimized/three.js"
 import { FontLoader } from "/FontLoader.js"
 import { TextGeometry } from "/TextGeometry.js"
@@ -28,6 +33,11 @@ function isMobile() {
         navigator.userAgent.match(/iPod/i) ||
         navigator.userAgent.match(/BlackBerry/i) ||
         navigator.userAgent.match(/Windows Phone/i)) {
+        clearOverlay();
+        console.log("Detected Mobile Device, rerouting to original version...");
+        window.location.href = "https://gallery.nowaythis.works/mobile.html";
+
+        // on fail, attempt mobile controls with new setup
         return true;
     } else {
         // find elements tagged movement-pad and hide them
@@ -53,12 +63,12 @@ const artwallSpawnDistance = 30;
  */
 // Internal
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0xe5e8ea, 0.05);
+// scene.fog = new THREE.FogExp2(0xe5e8ea, 0.05);
 scene.background = new THREE.Color(0xe5e8ea);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
-renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setClearColor(0xe5e8ea, 1);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -76,6 +86,12 @@ const ceilingTexture = new THREE.TextureLoader().load('img/ceiling.png', functio
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(3.5, 3.5);
+});
+
+const wallTexture = new THREE.TextureLoader().load('img/ceiling.png', function (texture) {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(5, 2.5);
 });
 
 // Camera Starting Position
@@ -98,7 +114,7 @@ function addControls() {
     touchControls.setPosition(0, 25, 400)
     touchControls.addToScene(scene)
 }
-addControls();
+if (mobile) addControls();
 
 // child cube for the camera, will be directly in front of it at all times
 const followCube = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0xff00ff, transparent: true, opacity: 0 }));
@@ -111,28 +127,31 @@ scene.add(camera);
  */
 const fontLoader = new FontLoader();
 
-const backgroundCube = new THREE.Mesh(new THREE.BoxGeometry(14, 12, 1), new THREE.MeshBasicMaterial({color: 0x000000}));
+const backgroundCube = new THREE.Mesh(new THREE.BoxGeometry(14, 12, 1), new THREE.MeshBasicMaterial({ color: 0x000000 }));
 backgroundCube.position.set(0, 0.5, -5.5);
 scene.add(backgroundCube);
 
 if (mobile) document.querySelector("#removal").style.textAlign = "center";
 
 var loadingText;
-fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
+var font;
+fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (montserrat) {
+    font = montserrat;
+    
     loadingText = new TextGeometry('Loading...', {
         font: font,
         size: 0.45,
         height: 1,
         curveSegments: 2
     });
-    
+
     const headerGeometry = new TextGeometry('The Infinite Gallery', {
         font: font,
         size: 80,
         height: 5,
         curveSegments: 2
     });
-    
+
     const header = new THREE.Mesh(headerGeometry, new THREE.MeshBasicMaterial({ color: 0xffffff }));
     scene.add(header);
     header.position.set(-6, 4, -5);
@@ -142,12 +161,12 @@ fontLoader.load('fonts/Montserrat SemiBold_Regular.json', function (font) {
         header.position.set(-1.85, 4, -5);
     }
 
-    var visitorText = 'This is an infinite 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art. Meaning, everything in this gallery\nwas created by a person like you or me!  Plus, there is no bias on the amount of votes a post got,\nso absolutely anyone\'s art could appear here, regardless of fame. Currently, there are over 1.8 MILLION pieces\nof art in this room. Just start walking and the exhibit will appear around you.\n\nThanks for visiting!';
+    var visitorText = 'This is an infinitem procedurally-generated 3D art gallery. Every piece of art is pulled from Reddit\'s r/Art.\nMeaning, everything in this gallery was created by a person like you or me!  Plus, there is no bias on the\namount of votes a post got, so absolutely anyone\'s art could appear here, regardless of fame.\nCurrently, there are over 1.8 MILLION pieces of art in this room. Just start walking and the exhibit\nwill appear around you.\n\nThanks for visiting!';
     if (mobile) {
         visitorText = 'This is an infinite 3D art gallery. Every piece of art is pulled from\nReddit\'s r/Art. Meaning, everything in this gallery was created by a\nperson like you or me!  Plus, there is no bias on the amount of votes\na post got, so absolutely anyone\'s art could appear here, regardless of fame.\nCurrently, there are over 1.8 MILLION pieces of art in this room.\nJust start walking and the exhibit will appear around you.\n\nThanks for visiting!';
         visitorText += '\n[Mobile Beta Version] Some features are only accessible on\na device with a keyboard and mouse.';
     }
-const subheaderGeometry = new TextGeometry(visitorText, {
+    const subheaderGeometry = new TextGeometry(visitorText, {
         font: font,
         size: 15,
         height: 5,
@@ -254,7 +273,7 @@ const chunkPositions = []; // separate list for faster sorting
 const chunkPieces = [];
 const chunkSize = 20;
 
-const renderDistance = 6;
+const renderDistance = 8;
 
 // check (cannot use includes due to exess data in each Vector2 object)
 function hasChunk(pos) {
@@ -276,107 +295,11 @@ function startGenerateCountdown() {
     readyToGenerate = false;
     setTimeout(function () {
         readyToGenerate = true;
-    }, 5 * 1000);
+    }, 0.5 * 1000);
 }
 
 // lerp the transparency 0 to 1
 const artboardMaterials = [];
-(function attemptArtboard() {
-    setTimeout(function () {
-        // ART GENERATION
-        if (Math.floor(Math.random() * 1000) < 200 && readyToGenerate == true) {
-            let canGenerate = true;
-            startGenerateCountdown();
-
-            const pos = new THREE.Vector3(0, 0, 0);
-            followCube.getWorldPosition(pos);
-
-            // make sure artwalls don't hop on the same spot, since they are separated from chunk meshes
-            for (let i = 0; i < chunkPieces.length; i++) {
-                if (chunkPieces[i].name == "artWall") {
-                    let thisPos = new THREE.Vector2(pos.x, pos.z);
-                    let thatPos = new THREE.Vector2(chunkPieces[i].position.x, chunkPieces[i].position.z);
-                    if (thisPos.distanceTo(thatPos) < 3) {
-                        canGenerate = false;
-                    }
-                }
-            }
-
-            if (canGenerate) {
-                let artWall = new THREE.Mesh(
-                    new THREE.BoxGeometry(1, 1, 0.1),
-                    new THREE.MeshBasicMaterial({
-                        color: 0xffffff
-                    })
-                );
-
-                const loadingTextMesh = new THREE.Mesh(
-                    loadingText,
-                    new THREE.MeshBasicMaterial({
-                        color: 0x000000
-                    })
-                );
-                scene.add(loadingTextMesh);
-                loadingTextMesh.scale.z /= 50;
-                loadingTextMesh.position.set(pos.x, 1, pos.z);
-                
-
-                chunkPieces.push(artWall);
-                artWall.name = "artWall";
-                
-                artWall.position.set(pos.x, groundHeight + 2, pos.z);
-                scene.add(artWall);
-                chunkPieces.push(artWall);
-
-                if (Math.floor(Math.random() * 10) < 5 && mobile == false) {
-                    artWall.rotation.y = -Math.PI / 2;
-                    loadingTextMesh.rotation.y = -Math.PI / 2;
-                    loadingTextMesh.position.z = pos.z - 1.4;
-                }
-                else
-                {
-                    loadingTextMesh.position.x = pos.x - 1.4;
-                }
-
-                const loader = new THREE.TextureLoader();
-                loader.setCrossOrigin("anonymous");
-                const rand = Math.floor(Math.random() * 1000000);
-                loader.load(
-                    "https://blog.nowaythis.works/random-image?dummy=" + rand,
-                    function (art) {
-                        // chance for chunk to spawn ART!!
-                        for (let x = 0; x < artImages.length; x++) {
-                            if (artImages[x] == art) {
-                                scene.remove(artWall);
-                                artImages.splice(artImages.indexOf(artImages[i].position), 1);
-                                canGenerate = false;
-                                scene.remove(artWall);
-                            }
-                        }
-
-                        if (canGenerate) {
-                            artImages.push(art);
-
-                            artWall.geometry = new THREE.BoxGeometry(art.image.width / 700, art.image.height / 700, 0.02);
-                            artWall.material = new THREE.MeshBasicMaterial({
-                                map: art,
-                                transparent: true,
-                                opacity: 0
-                            });
-
-                            artboardMaterials.push(artWall.material);
-                            scene.remove(loadingTextMesh);
-                        }
-                    }
-                );
-
-            }
-        }
-        attemptArtboard()
-    }, 1 * 1000);
-}());
-
-
 
 // format is Y X Z
 var isSprinting = false;
@@ -410,68 +333,62 @@ function update(delta) {
         }
     }
 
-    // this could easily be combined into one loop, but I'm too darn lazy to do that.
-    // especially because it would require refactoring code i wrote earlier, and it's too early in the morning to do that.
-    // so let's overcomplicate things: two loops that cycle floors and ceilings independently
+    // cleanup
     for (let i = 0; i < chunkPieces.length; i++) {
         if (chunkPieces[i].position.distanceTo(camera.position) > (renderDistance * (chunkSize / 2))) {
             scene.remove(chunkPieces[i]);
+            chunkPieces[i].geometry.dispose();
+            chunkPieces[i].material.dispose();
             chunkPositions.splice(chunkPositions.indexOf(chunkPieces[i].position), 1);
             chunkPieces.splice(chunkPieces.indexOf(chunkPieces[i]), 1);
         }
     }
 
     // CONTROLS
-    touchControls.update();
+    if (mobile) touchControls.update();
 
     if (mobile == false) {
         var movementPad = document.querySelector(".movement-pad");
         // remove the element
         if (movementPad != undefined) movementPad.parentNode.removeChild(movementPad);
     }
-    
+
     const moveSpeed = playerSpeed * delta * (1 + Number(isSprinting) * playerSpeedSprintMod);
-    
-    if (keys['KeyW'] || keys['ArrowUp'] || touchControls.moveForward) {
-        if (mobile && touchControls.moveBackward)
-        {
+
+    if (keys['KeyW'] || keys['ArrowUp'] || (mobile && touchControls.moveForward)) {
+        if (mobile && touchControls.moveBackward) {
             camera.position.z -= moveSpeed;
-        } else
-        {
+        } else {
             // forward movement
             moveVector.setFromMatrixColumn(camera.matrix, 0);
             moveVector.crossVectors(camera.up, moveVector);
             moveVector.multiplyScalar(moveSpeed);
-    
+
             camera.position.addScaledVector(moveVector, 1);
         }
     }
-    if (keys['KeyS'] || keys['ArrowDown'] || touchControls.moveBackward) {
-        if (mobile && touchControls.moveBackward)
-        {
+    if (keys['KeyS'] || keys['ArrowDown'] || (mobile && touchControls.moveBackward)) {
+        if (mobile && touchControls.moveBackward) {
             moveVector.setFromMatrixColumn(camera.matrix, 0);
             moveVector.crossVectors(camera.up, moveVector);
             moveVector.multiplyScalar(moveSpeed);
-    
+
             camera.position.addScaledVector(moveVector, -1);
         }
-        else
-        {
+        else {
             // backward movement
             moveVector.setFromMatrixColumn(camera.matrix, 0);
             moveVector.crossVectors(camera.up, moveVector);
             moveVector.multiplyScalar(moveSpeed);
-    
+
             camera.position.addScaledVector(moveVector, -1);
         }
     }
-    if (keys['KeyA'] || keys['ArrowLeft'] || touchControls.moveLeft) {
-        if (mobile && touchControls.moveLeft)
-        {
+    if (keys['KeyA'] || keys['ArrowLeft'] || (mobile && touchControls.moveLeft)) {
+        if (mobile && touchControls.moveLeft) {
             camera.position.x += moveSpeed;
         }
-        else
-        {
+        else {
             // left movement
             moveVector.setFromMatrixColumn(camera.matrix, 0);
             moveVector.multiplyScalar(moveSpeed);
@@ -479,13 +396,11 @@ function update(delta) {
         }
 
     }
-    if (keys['KeyD'] || keys['ArrowRight'] || touchControls.moveRight) {
-        if (mobile && touchControls.moveRight)
-        {
+    if (keys['KeyD'] || keys['ArrowRight'] || (mobile && touchControls.moveRight)) {
+        if (mobile && touchControls.moveRight) {
             camera.position.x -= moveSpeed;
         }
-        else
-        {
+        else {
             // right movement
             moveVector.setFromMatrixColumn(camera.matrix, 0);
             moveVector.multiplyScalar(moveSpeed);
@@ -502,9 +417,14 @@ function update(delta) {
 // to prevent dupes
 const artImages = [];
 function generateChunk(pos) {
+    // add to global chunks list
     chunkPositions.push(pos);
 
-    // chunk
+    // generate rand seeded on chunk position
+    const posString = pos.x + "" + pos.y + "" + pos.z;
+    const rand = Math.floor(new Math.seedrandom(posString).quick() * 100);
+
+    // chunk mesh
     const chunk = new THREE.Mesh(
         new THREE.PlaneGeometry(chunkSize, chunkSize, 1, 1),
         new THREE.MeshBasicMaterial({
@@ -517,6 +437,7 @@ function generateChunk(pos) {
     scene.add(chunk);
     chunkPieces.push(chunk);
 
+    // chunk ceiling
     const ceiling = new THREE.Mesh(
         new THREE.PlaneGeometry(chunkSize, chunkSize, 1, 1),
         new THREE.MeshBasicMaterial({
@@ -529,10 +450,150 @@ function generateChunk(pos) {
     scene.add(ceiling);
     chunkPieces.push(ceiling);
 
-    return true;
+    // min distance for walls is 15 away from spawn
+    if (pos.distanceTo(new THREE.Vector2(0, 0)) > 15) {
+        // check for dupes
+        for (let i = 0; i < chunkPieces.length; i++) {
+            if (chunkPieces[i].name == "wall") {
+                if (chunkPieces[i].position.equals(new THREE.Vector3(pos.x, 3.5, pos.y))) {
+                    return;
+                }
+            }
+        }
+
+        const wallBaseMesh = new THREE.Mesh(new THREE.BoxGeometry(chunkSize, chunkSize, 0.2), new THREE.MeshBasicMaterial({ color: 0xe8e6e6 }));
+        wallBaseMesh.position.set(pos.x, 3.5, pos.y);
+        wallBaseMesh.name = "wall";
+
+        const wallArtMesh = new THREE.Mesh(new THREE.BoxGeometry(chunkSize / 4, chunkSize / 4, 0.4), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 }));
+        wallArtMesh.position.set(pos.x + 0.01, 3.5, pos.y + 0.01);
+        wallArtMesh.name = "art";
+
+        let canGenerate = true;
+
+        if (rand < 50) {
+            wallBaseMesh.rotation.y = Math.PI / 2;
+            wallArtMesh.rotation.y = Math.PI / 2;
+        }
+        scene.add(wallArtMesh);
+        scene.add(wallBaseMesh);
+        chunkPieces.push(wallBaseMesh);
+        chunkPieces.push(wallArtMesh);
+        
+        for (let i = 0; i < chunkPieces.length; i++) {
+            if (chunkPieces[i].name == "art" || chunkPieces[i].name == "plaque") {
+                if (chunkPieces[i].position.equals(new THREE.Vector3(pos.x, 3.5, pos.y))) {
+                    canGenerate = false;
+                }
+            }
+        }
+
+        // 10% wont have nothin, excusing the generator cooldown. this consistently adds nice spacing in between artworks.
+        if (rand < 45) {
+            if (!readyToGenerate) return;
+            
+            // first make a request to random-image-identify
+            console.log("Making Request");
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://blog.nowaythis.works/random-image-identify");
+            xhr.send();
+            xhr.onload = function () {
+                if (xhr.status == 200) {
+                    startGenerateCountdown();
+                    
+                    const loadingTextMesh = new THREE.Mesh(
+                        loadingText,
+                        new THREE.MeshBasicMaterial({
+                            color: 0x000000
+                        })
+                    );
+                    scene.add(loadingTextMesh);
+                    loadingTextMesh.scale.z /= 50;
+                    loadingTextMesh.position.set(pos.x+0.1, 1, pos.y+0.1);
+                    loadingTextMesh.rotation.y = Math.PI/2;
+                    
+                    const response = xhr.responseText.split('|||||');
+                    let metadata = response[0];
+                    // add a '\n' to metadata every 48 characters
+                    let metadataFormatted = "";
+                    for (let i = 0; i < metadata.length; i++) {
+                        if (i % 48 == 0) {
+                            metadataFormatted += "\n";
+                        }
+                        metadataFormatted += metadata[i];
+                    }
+                    metadata = metadataFormatted;
+                    const urlToRequest = response[1];
+                    console.log("Got Response");
+
+                    const loader = new THREE.TextureLoader();
+                    loader.setCrossOrigin("anonymous");
+
+                    loader.load(
+                        "https://blog.nowaythis.works/get-image-direct?url=" + urlToRequest,
+                        function (art) {
+                            // chance for chunk to spawn ART!!
+                            for (let x = 0; x < artImages.length; x++) {
+                                if (artImages[x] == art) {
+                                    artImages.splice(artImages.indexOf(artImages[i].position), 1);
+                                    canGenerate = false;
+                                    console.log("Failed. Dupe Found.");
+                                    scene.remove(wallArtMesh);
+                                }
+                            }
+
+                            if (canGenerate) {
+                                artImages.push(art);
+
+                                wallArtMesh.geometry = new THREE.BoxGeometry(art.image.width / 600, art.image.height / 600, 0.01);
+                                wallArtMesh.material = new THREE.MeshBasicMaterial({
+                                    map: art,
+                                    transparent: true,
+                                    opacity: 0
+                                });
+
+                                artboardMaterials.push(wallArtMesh.material);
+                                
+                                // create a plaque with the metadata (which includes the author + title)
+                                const plaqueMesh = new THREE.Mesh(
+                                    new THREE.BoxGeometry(4.5, 1.25, 0.25),
+                                    new THREE.MeshBasicMaterial({
+                                        color: 0xb59e1b
+                                    })
+                                );
+                                plaqueMesh.rotation.y = Math.PI / 2;
+                                plaqueMesh.position.set(pos.x+0.25, 1, pos.y);
+                                plaqueMesh.name = "plaque";
+                                wallArtMesh.position.x += 0.25;
+                                scene.add(plaqueMesh);
+    
+                                // plaque text
+                                const plaqueTextMesh = new THREE.Mesh(
+                                    new TextGeometry(metadata, {
+                                        font: font,
+                                        size: 0.1,
+                                        height: 0.13
+                                    }),
+                                    new THREE.MeshBasicMaterial({
+                                        color: 0x000000
+                                    })
+                                );
+                                plaqueTextMesh.position.x -= 2;
+                                plaqueTextMesh.position.y += 0.3;
+                                plaqueMesh.add(plaqueTextMesh);
+                            }
+                            scene.remove(loadingTextMesh);
+                        }
+                    );
+                }
+            }
+        }
+
+        return true;
+    }
 }
 
-generateChunk(new THREE.Vector2(0, 0));
+// generateChunk(new THREE.Vector2(0, 0));
 
 const time = new THREE.Clock();
 
@@ -559,4 +620,19 @@ document.addEventListener('keydown', function (event) {
     if (event.code === 'KeyV') {
         mouseNegative = -1 * mouseNegative;
     }
+});
+
+// on press of E key, move the camera UP 1 unit. on press of Q key, move the camera DOWN 1 unit.
+document.addEventListener('keydown', function (event) {
+    if (event.code === 'KeyE') {
+        camera.position.y += 1;
+    }
+    if (event.code === 'KeyQ') {
+        camera.position.y -= 1;
+    }
+});
+
+// on body click, delete element "click-warning-overlay" if it exists
+document.body.addEventListener('click', function (event) {
+    clearOverlay();
 });
