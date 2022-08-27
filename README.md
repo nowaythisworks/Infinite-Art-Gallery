@@ -13,7 +13,7 @@ Rendered entirely with THREE.JS in the browser. (May) require a server couterpar
 - ~~Proper Crediting - right now, the server will etch the artist's name onto the image file. This is both hard to read and computationally intensive (and possibly a licensing violation in some cases?), so maybe a plaque with the author and title could be better. Unfortunately, Reddit's API is prone to many (many) issues and we can't just direct-link the image without the middleman server.~~ Done!
 - VR Support. Some nice people online told me this would work really well in VR. Lucky I have a rift lying around to test the idea with!
 - ~~Walls. Add some excitement to walking! Place art in frames on walls, above plaques with information about them.~~ Done!
-- ~~rver rewrite. Currently it's very slow and running on a machine less powerful than a raspberry pi, haha.~~ Done!
+- ~~Server rewrite. Currently it's very slow and running on a machine less powerful than a raspberry pi, haha.~~ Done!
 - 3D Art: Sculptures section! Single-colored 3d models in their own exhibits.
 - Art Submissions. Maybe people could manually submit their own art?
 - Classical Art. The Harvard Art Museum and The Met offer open-sourced APIs for serving classical images. This kind of goes against the point of the project though, which is to showcase art made by people like you and me - not classical artists. This one needs some discussion!
