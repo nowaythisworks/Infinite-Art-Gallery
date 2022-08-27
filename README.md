@@ -22,4 +22,5 @@ Rendered entirely with THREE.JS in the browser. (May) require a server couterpar
 - ~~Mouse Direction Reversal~~ Done!
 
 ![front board and tutorial](https://user-images.githubusercontent.com/66288732/185100953-3f2e287d-b06c-4140-a500-f01a32982888.png)
-![art piece in preview](https://user-images.githubusercontent.com/66288732/185100745-2bb8a35d-71ad-4fb5-b9b7-0c800acf6cda.png)
+![walls and art](https://user-images.githubusercontent.com/66288732/187042850-a3ef3008-098c-4543-9894-c5d45ed2a533.png)
+
